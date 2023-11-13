@@ -1,0 +1,145 @@
+/* Structure */
+body {
+    background-color: #A3D6E2;
+    font-family: Andale Mono, monospace;
+    color: #C1DBE1;
+}
+
+h1 {
+    text-align: center;
+    border: 3px solid black;
+    background: white;
+    color: black;
+    padding: 10px;
+}
+
+#team-details {
+    padding: 10px;
+    margin: 10px;
+    background: white;
+    border: 3px solid black;
+    color: black;
+}
+
+#add-link {
+    font-size: 2em;
+    background-color: white;
+    border: 3px solid black;
+}
+
+#data-status {
+    background-color: white;
+    border: 3px solid black;
+    width: 40%;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+#edit-link {
+    float: right;
+    margin-right: 10px;
+}
+
+#delete-link {
+    float: right;
+}
+
+#soccer-team-form {
+    padding: 10px;
+    margin: 10px;
+}
+
+#main-content {
+    flex-direction: column;
+    align-items: center;
+}
+
+#add-soccer-team {
+    border: 3px solid #A3D6E2;
+    background: white;
+    padding: 30px;
+    border-color: black;
+    color: black;
+}
+
+#soccer-team-list {
+    width: 100%; 
+}
+
+.soccer-team {
+    padding: 10px;
+    margin: 10px;
+    background: white;
+    border: 3px solid black;
+}
+
+.pad-this {
+    padding: 20px;
+}
+
+/* Form */
+label {
+    display: block;
+}
+
+#titles-p input {
+    margin-top: 5px;
+}
+
+#add-title {
+    color: #A3D6E2;
+    font-size: 0.75em;
+    text-align: right;
+}
+
+.inline {
+    display: inline;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 0px 5px;
+}
+
+/* Typography */
+a {
+    text-decoration: none;
+    color: black;
+}
+
+#main-nav-items {
+    font-size: 1.2em;
+}
+
+.hidden {
+    display: none;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+/* Larger Resolutions */
+@media (min-width: 600px) {
+    #add-soccer-team {
+        max-width: 30%;
+        margin: auto;
+    }
+
+    .flex-container {
+        display: flex;
+    }
+
+    .wrap {
+        flex-wrap: wrap;
+    }
+
+    .soccer-team {
+        width: 25%;
+    }
+}
