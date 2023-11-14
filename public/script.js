@@ -1,22 +1,22 @@
-const getSoccerTeams = async () => {
+const getTeams = async () => {
     try {
-        return (await fetch("api/soccer-teams")).json();
+        return (await fetch("/api/teams")).json();
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
-const showSoccerTeams = async () => {
-    let soccerTeams = await getSoccerTeams();
-    let soccerTeamsDiv = document.getElementById("soccer-team-list");
-    soccerTeamsDiv.classList.add("flex-container");
-    soccerTeamsDiv.classList.add("wrap");
-    soccerTeamsDiv.innerHTML = "";
+const showTeams = async () => {
+    let teams = await getTeams();
+    let teamsDiv = document.getElementById("team-list");
+    teamsDiv.classList.add("flex-container");
+    teamsDiv.classList.add("wrap");
+    teamsDiv.innerHTML = "";
 
-    soccerTeams.forEach((team) => {
+    teams.forEach((team) => {
         const section = document.createElement("section");
         section.classList.add("soccer-team");
-        soccerTeamsDiv.append(section);
+        teamsDiv.append(section);
 
         const a = document.createElement("a");
         a.href = "#";
@@ -35,7 +35,7 @@ const showSoccerTeams = async () => {
 };
 
 const displayDetails = (team) => {
-    const teamDetails = document.getElementById("soccer-team-details");
+    const teamDetails = document.getElementById("team-details");
     teamDetails.innerHTML = "";
     teamDetails.classList.add("flex-container");
 
@@ -44,39 +44,29 @@ const displayDetails = (team) => {
     teamDetails.append(h3);
     h3.classList.add("pad-this");
 
-    const dLink = document.createElement("a");
-    dLink.innerHTML = "	&#x2715;";
-    teamDetails.append(dLink);
-    dLink.id = "delete-link";
-
-    const eLink = document.createElement("a");
-    eLink.innerHTML = "&#9998;";
-    teamDetails.append(eLink);
-    eLink.id = "edit-link";
-
     const p1 = document.createElement("p");
     teamDetails.append(p1);
-    p1.innerHTML = 'League: ' + team.league;
+    p1.innerHTML = 'Coach: ' + team.coach;
     p1.classList.add("pad-this");
 
     const p2 = document.createElement("p");
     teamDetails.append(p2);
-    p2.innerHTML = 'Founded: ' + team.founded;
+    p2.innerHTML = 'Stadium: ' + team.stadium;
     p2.classList.add("pad-this");
 
     const p3 = document.createElement("p");
     teamDetails.append(p3);
-    p3.innerHTML = 'Stadium: ' + team.stadium;
+    p3.innerHTML = 'Country: ' + team.country;
     p3.classList.add("pad-this");
 
     const ul = document.createElement("ul");
     teamDetails.append(ul);
     ul.classList.add("pad-this");
-    console.log(team.titles);
-    team.titles.forEach((title) => {
+
+    team.players.forEach((player) => {
         const li = document.createElement("li");
         ul.append(li);
-        li.innerHTML = title;
+        li.innerHTML = player;
     });
 
     eLink.onclick = (e) => {
@@ -90,23 +80,22 @@ const displayDetails = (team) => {
 
 const populateEditForm = (team) => {};
 
-const addSoccerTeam = async (e) => {
+const addTeam = async (e) => {
     e.preventDefault();
-    const form = document.getElementById("soccer-team-form");
+    const form = document.getElementById("team-form");
     const formData = new FormData(form);
     const dataStatus = document.getElementById("data-status");
     let response;
 
     if (form._id.value == -1) {
         formData.delete("_id");
-        formData.append("titles", getTitles());
+        formData.append("players", getPlayers());
 
-        console.log(...formData);
-
-        response = await fetch("/api/soccer-teams", {
+        response = await fetch("/api/teams", {
             method: "POST",
             body: formData
         });
+
         dataStatus.classList.remove("hidden");
         dataStatus.innerHTML = "Data Successfully Posted!";
         setTimeout(() => {
@@ -114,62 +103,62 @@ const addSoccerTeam = async (e) => {
         }, 3000);
     }
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
         dataStatus.classList.remove("hidden");
         dataStatus.innerHTML = "Error Posting Data!";
         setTimeout(() => {
             dataStatus.classList.add("hidden");
         }, 3000);
-        console.log("Error posting data");
+        console.error("Error posting data");
     }
 
     response = await response.json();
     resetForm();
     document.querySelector(".dialog").classList.add("transparent");
-    showSoccerTeams();
+    showTeams();
 };
 
-const getTitles = () => {
-    const inputs = document.querySelectorAll("#title-boxes input");
-    let titles = [];
+const getPlayers = () => {
+    const inputs = document.querySelectorAll("#player-boxes input");
+    let players = [];
 
     inputs.forEach((input) => {
-        titles.push(input.value);
+        players.push(input.value);
     });
 
-    return titles;
+    return players;
 }
 
 const resetForm = () => {
-    const form = document.getElementById("soccer-team-form");
+    const form = document.getElementById("team-form");
     form.reset();
     form._id = "-1";
-    document.getElementById("title-boxes").innerHTML = "";
+    document.getElementById("player-boxes").innerHTML = "";
 };
 
 const showHideAdd = (e) => {
     e.preventDefault();
     document.querySelector(".dialog").classList.remove("transparent");
-    document.getElementById("add-edit").innerHTML = "Add Soccer Team";
+    document.getElementById("add-edit").innerHTML = "Add Team";
     resetForm();
 };
 
-const addTitle = (e) => {
+const addPlayer = (e) => {
     e.preventDefault();
-    const section = document.getElementById("title-boxes");
+    const section = document.getElementById("player-boxes");
     const input = document.createElement("input");
     input.type = "text";
     section.append(input);
 }
 
 window.onload = () => {
-    showSoccerTeams();
-    document.getElementById("soccer-team-form").onsubmit = addSoccerTeam;
+    showTeams();
+    document.getElementById("team-form").onsubmit = addTeam;
     document.getElementById("add-link").onclick = showHideAdd;
 
     document.querySelector(".close").onclick = () => {
         document.querySelector(".dialog").classList.add("transparent");
     };
 
-    document.getElementById("add-title").onclick = addTitle;
+    document.getElementById("add-player").onclick = addPlayer;
 };

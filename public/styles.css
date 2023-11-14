@@ -6,25 +6,35 @@ body {
 }
 
 h1 {
+    margin: 0 auto;
     text-align: center;
     border: 3px solid black;
     background: white;
     color: black;
     padding: 10px;
+    border-radius: 5px;
+    width: 500px;
 }
 
 #team-details {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 10px;
     margin: 10px;
     background: white;
     border: 3px solid black;
     color: black;
+    border-radius: 5px;
+    justify-content: center;
 }
 
 #add-link {
     font-size: 2em;
     background-color: white;
     border: 3px solid black;
+    border-radius: 5px;
 }
 
 #data-status {
@@ -37,18 +47,12 @@ h1 {
     margin: 0 auto;
 }
 
-#edit-link {
-    float: right;
-    margin-right: 10px;
-}
-
-#delete-link {
-    float: right;
-}
-
-#soccer-team-form {
+#add-team {
     padding: 10px;
     margin: 10px;
+    border: 3px solid black;
+    color: black;
+    background-color: white;
 }
 
 #main-content {
@@ -56,16 +60,10 @@ h1 {
     align-items: center;
 }
 
-#add-soccer-team {
-    border: 3px solid #A3D6E2;
-    background: white;
-    padding: 30px;
-    border-color: black;
-    color: black;
-}
-
-#soccer-team-list {
-    width: 100%; 
+#team-list {
+    width: 100%;
+    display: flex;
+    justify-content: right;
 }
 
 .soccer-team {
@@ -73,6 +71,7 @@ h1 {
     margin: 10px;
     background: white;
     border: 3px solid black;
+    justify-content: right;
 }
 
 .pad-this {
@@ -84,12 +83,12 @@ label {
     display: block;
 }
 
-#titles-p input {
+#title-boxes input {
     margin-top: 5px;
 }
 
 #add-title {
-    color: #A3D6E2;
+    color: black;
     font-size: 0.75em;
     text-align: right;
 }
@@ -99,7 +98,7 @@ label {
 }
 
 .close {
-    color: #aaaaaa;
+    color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -126,7 +125,7 @@ a {
 
 /* Larger Resolutions */
 @media (min-width: 600px) {
-    #add-soccer-team {
+    #add-team {
         max-width: 30%;
         margin: auto;
     }

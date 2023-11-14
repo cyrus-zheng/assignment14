@@ -1,51 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js"></script>
 </head>
 <body>
     <header>
-        <h1>Soccer Teams</h1>
+        <h1>Professional Soccer Teams</h1>
         <div id="data-status" class="hidden"></div>
     </header>
 
     <section class="flex-container">
         <section id="main-content">
-            <a href="#" id="add-link">+</a>
-            <section id="soccer-team-list" class="flex-container"></section>
+            <a href="#" id="add-link">+ Add A Team</a>
+            <section id="team-list" class="flex-container"></section>
             <section id="hide-details" class="hidden">
-                <section id="soccer-team-details" class="flex-container">
+                <section id="team-details" class="flex-container">
                     <h2>Details</h2>
                     <div id="team-details"></div>
                 </section>
             </section>
         </section>
-        <section id="add-soccer-team" class="dialog transparent">
+        <section id="add-team" class="dialog transparent">
             <span class="close">&times;</span>
             <h3 id="add-edit"></h3>
-            <form id="soccer-team-form" method="post">
+            <form id="team-form" method="post">
                 <input type="hidden" name="_id" value="-1" />
                 <p>
-                    <label for="name ">Team Name:</label>
+                    <label for="name">Team Name:</label>
                     <input type="text" id="name" name="name" required />
                 </p>
                 <p>
-                    <label for="league ">League:</label>
-                    <input type="text" id="league" name="league" required />
-                </p>
-                <p>
-                    <label for="founded ">Founded:</label>
-                    <input type="number" id="founded" name="founded" required />
+                    <label for="coach">Coach:</label>
+                    <input type="text" id="coach" name="coach" required />
                 </p>
                 <p>
                     <label for="stadium">Stadium:</label>
                     <input type="text" id="stadium" name="stadium" required />
                 </p>
-                <p id="titles-p">
-                    <label class="inline">Titles:</label>
-                    <a href="#" id="add-title">Add Title</a>
-                    <section id="title-boxes"></section>
+                <p>
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country" required />
+                </p>
+                <p id="players-p">
+                    <label class="inline">Players:</label>
+                    <a href="#" id="add-player">Add Player</a>
+                    <section id="player-boxes"></section>
                 </p>
                 <p>
                     <button type="submit">Submit</button>
@@ -53,6 +53,5 @@
             </form>
         </section>
     </section>
-    
 </body>
 </html>

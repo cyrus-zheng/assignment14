@@ -13,85 +13,99 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-let soccerTeams = [{
-    _id: 1,
-    name: "Real Madrid",
-    league: "La Liga",
-    founded: 1902,
-    stadium: "Santiago Bernabeu",
-    titles: [
-        "34 La Liga titles",
-        "19 Copa del Rey titles",
-        "13 UEFA Champions League titles",
-    ],
-},
-{
-    _id: 2,
-    name: "Manchester City",
-    league: "Premier League",
-    founded: 1880,
-    stadium: "Etihad Stadium",
-    titles: [
-        "6 English League titles",
-        "7 FA Cup titles",
-        "6 EFL Cup titles",
-    ],
-},
-{
-    _id: 3,
-    name: "FC Barcelona",
-    league: "La Liga",
-    founded: 1899,
-    stadium: "Camp Nou",
-    titles: [
-        "26 La Liga titles",
-        "31 Copa del Rey titles",
-        "5 UEFA Champions League titles",
-    ],
-},
-{
-    _id: 4,
-    name: "Bayern Munich",
-    league: "Bundesliga",
-    founded: 1900,
-    stadium: "Allianz Arena",
-    titles: [
-        "31 Bundesliga titles",
-        "20 DFB-Pokal titles",
-        "6 UEFA Champions League titles",
-    ],
-},
-{
-    _id: 5,
-    name: "Paris Saint-Germain",
-    league: "Ligue 1",
-    founded: 1970,
-    stadium: "Parc des Princes",
-    titles: [
-        "10 Ligue 1 titles",
-        "14 Coupe de France titles",
-        "1 UEFA Cup Winners' Cup",
-    ],
-},
-{
-    _id: 6,
-    name: "Liverpool",
-    league: "Premier League",
-    founded: 1892,
-    stadium: "Anfield",
-    titles: [
-        "19 English League titles",
-        "7 FA Cup titles",
-        "6 UEFA Champions League titles",
-    ],
-}];
+let soccerTeams = [
+    {
+        _id: 1,
+        name: "FC Barcelona",
+        coach: "Xavi Hernandez",
+        stadium: "Camp Nou",
+        country: "Spain",
+        players: [
+            "Lionel Messi",
+            "Ansu Fati",
+            "Sergio Busquets",
+            "Gerard Piqué",
+            "Jordi Alba"
+        ]
+    },
+    {
+        _id: 2,
+        name: "Real Madrid CF",
+        coach: "Carlo Ancelotti",
+        stadium: "Santiago Bernabeu",
+        country: "Spain",
+        players: [
+            "Karim Benzema",
+            "Vinicius Junior",
+            "Luka Modric",
+            "Sergio Ramos",
+            "Marcelo"
+        ]
+    },
+    {
+        _id: 3,
+        name: "Liverpool FC",
+        coach: "Jurgen Klopp",
+        stadium: "Anfield",
+        country: "England",
+        players: [
+            "Mohamed Salah",
+            "Sadio Mane",
+            "Jordan Henderson",
+            "Virgil van Dijk",
+            "Andrew Robertson"
+        ]
+    },
+    {
+        _id: 4,
+        name: "FC Bayern Munich",
+        coach: "Julian Nagelsmann",
+        stadium: "Allianz Arena",
+        country: "Germany",
+        players: [
+            "Robert Lewandowski",
+            "Thomas Muller",
+            "Joshua Kimmich",
+            "Manuel Neuer",
+            "Alphonso Davies"
+        ]
+    },
+    {
+        _id: 5,
+        name: "Paris Saint-Germain",
+        coach: "Mauricio Pochettino",
+        stadium: "Parc des Princes",
+        country: "France",
+        players: [
+            "Kylian Mbappe",
+            "Neymar Jr.",
+            "Marco Verratti",
+            "Marquinhos",
+            "Achraf Hakimi"
+        ]
+    },
+    {
+        _id: 6,
+        name: "Juventus FC",
+        coach: "Massimiliano Allegri",
+        stadium: "Allianz Stadium",
+        country: "Italy",
+        players: [
+            "Cristiano Ronaldo",
+            "Paulo Dybala",
+            "Giorgio Chiellini",
+            "Federico Chiesa",
+            "Dejan Kulusevski"
+        ]
+    }
+];
 
-app.get("/api/soccerteams", (req, res) => {
-    res.send(soccerteams);
+
+app.get("/api/teams", (req, res) => {
+    res.send(soccerTeams);
 });
 
-app.post("/api/soccerteams", upload.single("img"), (req, res) => {
-
+app.post("/api/teams", upload.single("img"), (req, res) => {
     const result = validateTeam(req.body);
 
     if (result.error) {
@@ -99,34 +113,32 @@ app.post("/api/soccerteams", upload.single("img"), (req, res) => {
         return;
     }
 
-    const soccerTeam = {
+    const team = {
         _id: soccerTeams.length + 1,
         name: req.body.name,
-        league: req.body.league,
-        founded: req.body.founded,
+        coach: req.body.coach,
         stadium: req.body.stadium,
-        titles: req.body.titles.split(","),
-    };
-    
-    console.log(soccerTeam);
-    
-    soccerTeams.push(soccerTeam);
+        country: req.body.country,
+        players: req.body.players.split(","),
+    }
+
+    soccerTeams.push(team);
     res.send(soccerTeams);
+});
+
+const validateTeam = (team) => {
+    const schema = Joi.object({
+        _id: Joi.optional(),
+        name: Joi.string().min(1).required(),
+        coach: Joi.string().required(),
+        stadium: Joi.string().required(),
+        country: Joi.string().required(),
+        players: Joi.allow(""),
     });
-    
-    const validateSoccerTeam = (soccerTeam) => {
-        const schema = Joi.object({
-            _id: Joi.optional(),
-            name: Joi.string().min(1).required(),
-            league: Joi.string().required(),
-            founded: Joi.number().required(),
-            stadium: Joi.string().required(),
-            titles: Joi.allow("").required(),
-        });
-    
-        return schema.validate(soccerTeam);
-    };
-    
-    app.listen(3000, () => {
-        console.log("I'm listening");
-    });
+
+    return schema.validate(team);
+};
+
+app.listen(3000, () => {
+    console.log("Running");
+});
