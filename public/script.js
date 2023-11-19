@@ -31,6 +31,29 @@ const showTeams = async () => {
             document.getElementById("hide-details").classList.remove("hidden");
             displayDetails(team);
         };
+
+        const editButton = document.createElement("button");
+        editButton.innerHTML = "Edit";
+        section.append(editButton);
+
+        editButton.onclick = (e) => {
+            e.preventDefault();
+            document.querySelector(".dialog").classList.remove("transparent");
+            document.getElementById("add-edit").innerHTML = "Edit Team Details";
+            populateEditForm(team);
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Delete";
+        section.append(deleteButton);
+
+        deleteButton.onclick = async (e) => {
+            e.preventDefault();
+            const confirmation = window.confirm("Are you sure you want to delete this team?");
+            if (confirmation) {
+                await deleteTeam(team._id);
+            }
+        };
     });
 };
 
@@ -69,16 +92,37 @@ const displayDetails = (team) => {
         li.innerHTML = player;
     });
 
-    eLink.onclick = (e) => {
+    const editButton = document.createElement("button");
+    editButton.innerHTML = "Edit";
+    teamDetails.append(editButton);
+
+    editButton.onclick = (e) => {
         e.preventDefault();
         document.querySelector(".dialog").classList.remove("transparent");
         document.getElementById("add-edit").innerHTML = "Edit Team Details";
+        populateEditForm(team);
     };
-
-    populateEditForm(team);
 };
 
-const populateEditForm = (team) => {};
+const populateEditForm = (team) => {
+    const form = document.getElementById("team-form");
+    form._id.value = team._id;
+    form.name.value = team.name;
+    form.coach.value = team.coach;
+    form.stadium.value = team.stadium;
+    form.country.value = team.country;
+
+
+    document.getElementById("player-boxes").innerHTML = "";
+
+
+    team.players.forEach((player) => {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = player;
+        document.getElementById("player-boxes").appendChild(input);
+    });
+};
 
 const addTeam = async (e) => {
     e.preventDefault();
@@ -88,6 +132,7 @@ const addTeam = async (e) => {
     let response;
 
     if (form._id.value == -1) {
+
         formData.delete("_id");
         formData.append("players", getPlayers());
 
@@ -95,12 +140,12 @@ const addTeam = async (e) => {
             method: "POST",
             body: formData
         });
+    } else {
 
-        dataStatus.classList.remove("hidden");
-        dataStatus.innerHTML = "Data Successfully Posted!";
-        setTimeout(() => {
-            dataStatus.classList.add("hidden");
-        }, 3000);
+        response = await fetch(`/api/teams/${form._id.value}`, {
+            method: "PUT",
+            body: formData
+        });
     }
 
     if (response.status !== 200) {
@@ -110,12 +155,31 @@ const addTeam = async (e) => {
             dataStatus.classList.add("hidden");
         }, 3000);
         console.error("Error posting data");
+        return;
     }
 
     response = await response.json();
     resetForm();
     document.querySelector(".dialog").classList.add("transparent");
     showTeams();
+};
+
+const deleteTeam = async (teamId) => {
+    try {
+        const response = await fetch(`/api/teams/${teamId}`, {
+            method: "DELETE"
+        });
+
+        if (response.status !== 200) {
+            console.error("Error deleting team");
+            return;
+        }
+
+        const updatedTeams = await response.json();
+        showTeams(updatedTeams);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 const getPlayers = () => {

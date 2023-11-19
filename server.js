@@ -99,8 +99,6 @@ let soccerTeams = [
         ]
     }
 ];
-
-
 app.get("/api/teams", (req, res) => {
     res.send(soccerTeams);
 });
@@ -123,6 +121,47 @@ app.post("/api/teams", upload.single("img"), (req, res) => {
     }
 
     soccerTeams.push(team);
+    res.send(soccerTeams);
+});
+
+app.put("/api/teams/:id", upload.single("img"), (req, res) => {
+    const teamId = parseInt(req.params.id);
+    const teamIndex = soccerTeams.findIndex(team => team._id === teamId);
+
+    if (teamIndex === -1) {
+        res.status(404).send("Team not found");
+        return;
+    }
+
+    const result = validateTeam(req.body);
+
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    soccerTeams[teamIndex] = {
+        _id: teamId,
+        name: req.body.name,
+        coach: req.body.coach,
+        stadium: req.body.stadium,
+        country: req.body.country,
+        players: req.body.players.split(","),
+    };
+
+    res.send(soccerTeams);
+});
+
+app.delete("/api/teams/:id", (req, res) => {
+    const teamId = parseInt(req.params.id);
+    const teamIndex = soccerTeams.findIndex(team => team._id === teamId);
+
+    if (teamIndex === -1) {
+        res.status(404).send("Team not found");
+        return;
+    }
+
+    soccerTeams.splice(teamIndex, 1);
     res.send(soccerTeams);
 });
 
