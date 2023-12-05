@@ -53,6 +53,7 @@ h1 {
     border: 3px solid black;
     color: black;
     background-color: white;
+    border-radius: 5px;
 }
 
 #main-content {
@@ -63,7 +64,11 @@ h1 {
 #team-list {
     width: 100%;
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
+    background-color: white;
+    border-radius: 5px;
+    border: 3px solid black;
+    margin: 20px;
 }
 
 .soccer-team {

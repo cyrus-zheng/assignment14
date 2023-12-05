@@ -15,7 +15,7 @@ const showTeams = async () => {
 
     teams.forEach((team) => {
         const section = document.createElement("section");
-        section.classList.add("team");
+        section.classList.add("team-model");
         teamsDiv.append(section);
 
         const a = document.createElement("a");
@@ -23,11 +23,11 @@ const showTeams = async () => {
         section.append(a);
 
         const h3 = document.createElement("h3");
-        h3.innerHTML = team.name;
+        h3.innerHTML = team.name + " (" + team.country + ")";
         a.append(h3);
 
         const img = document.createElement("img");
-        img.src = team.logo;
+        img.src = team.img;
         section.append(img);
 
         a.onclick = (e) => {
@@ -67,7 +67,7 @@ const displayDetails = (team) => {
     teamDetails.classList.add("flex-container");
 
     const h3 = document.createElement("h3");
-    h3.innerHTML = team.name;
+    h3.innerHTML = team.name + " (" + team.country + ")";
     teamDetails.append(h3);
     h3.classList.add("pad-this");
 
@@ -78,8 +78,13 @@ const displayDetails = (team) => {
 
     const p2 = document.createElement("p");
     teamDetails.append(p2);
-    p2.innerHTML = 'Country: ' + team.country;
+    p2.innerHTML = 'Stadium: ' + team.stadium;
     p2.classList.add("pad-this");
+
+    const p3 = document.createElement("p");
+    teamDetails.append(p3);
+    p3.innerHTML = 'Coach: ' + team.coach;
+    p3.classList.add("pad-this");
 
     const ul = document.createElement("ul");
     teamDetails.append(ul);
@@ -128,8 +133,10 @@ const populateEditForm = (team) => {
     console.log(team._id);
     form._id.value = team._id;
     form.name.value = team.name;
-    form.founded.value = team.founded;
     form.country.value = team.country;
+    form.founded.value = team.founded;
+    form.stadium.value = team.stadium;
+    form.coach.value = team.coach;
 
     document.getElementById("player-boxes").innerHTML = "";
 
@@ -151,11 +158,14 @@ const addEditTeam = async (e) => {
 
     if (form._id.value == -1) {
         formData.delete("_id");
+        console.log(formData);
         response = await fetch("/api/teams", {
             method: "POST",
             body: formData
         });
     } else {
+        console.log(...formData);
+
         response = await fetch(`/api/teams/${form._id.value}`, {
             method: "PUT",
             body: formData
@@ -169,6 +179,7 @@ const addEditTeam = async (e) => {
             dataStatus.classList.add("hidden");
         }, 3000);
         console.error("Error posting data");
+        // console.error(response.status);
         return;
     }
 
@@ -214,7 +225,7 @@ const addPlayer = (e) => {
     const input = document.createElement("input");
     input.type = "text";
     section.append(input);
-};
+}
 
 window.onload = () => {
     showTeams();
